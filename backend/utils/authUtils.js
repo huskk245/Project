@@ -1,4 +1,3 @@
-// utils/authUtils.js
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
@@ -20,7 +19,22 @@ export const registerUser = async (username, password, role) => {
 
   const user = new User({ username, password, role });
   await user.save();
-  return { message: 'User registered successfully' };
+
+  // Generate JWT token
+  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+  return {
+    message: 'User registered successfully',
+    token,
+    user: {
+      id: user._id,
+      username: user.username,
+      role: user.role,
+      profileCompleted: user.profileCompleted,
+      verified: user.verified,
+      verificationStatus: user.verificationStatus,
+    },
+  };
 };
 
 // Login a user and return a JWT token
@@ -35,6 +49,25 @@ export const loginUser = async (username, password) => {
     throw new Error('Invalid credentials');
   }
 
+  // Generate JWT token
   const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  return { token };
+
+  return {
+    message: 'Login successful',
+    token,
+    role: user.role,
+    user: {
+      id: user._id,
+      username: user.username,
+      role: user.role,
+      phoneNumber: user.phoneNumber,
+      dob: user.dob,
+      address: user.address,
+      farmSize: user.farmSize,
+      photo: user.photo,
+      profileCompleted: user.profileCompleted,
+      verified: user.verified,
+      verificationStatus: user.verificationStatus,
+    },
+  };
 };

@@ -1,8 +1,9 @@
 import express from 'express';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
-import userRoutes from './routes/user.js'; // Add user routes
-import productRoutes from './routes/product.js'; // Add product routes
+import userRoutes from './routes/user.js';
+import verificationRoutes from './routes/verification.js';
+import productRoutes from './routes/product.js';
 import cors from 'cors';
 
 const app = express();
@@ -10,6 +11,9 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware to parse JSON requests
 app.use(express.json());
+
+// Serve static files from the uploads folder
+app.use('/uploads', express.static('uploads'));
 
 // Enable CORS for the frontend
 app.use(cors({
@@ -23,8 +27,9 @@ connectDB()
   .then(() => {
     // Routes
     app.use('/api/auth', authRoutes);
-    app.use('/api/users', userRoutes); // Add user routes
-    app.use('/api/products', productRoutes); // Add product routes
+    app.use('/api/users', userRoutes);
+    app.use('/api/verifications', verificationRoutes);
+    app.use('/api/products', productRoutes);
 
     // Start the server
     app.listen(PORT, () => console.log(`Server running on port ${PORT} ✅`));

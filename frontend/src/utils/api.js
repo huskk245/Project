@@ -4,15 +4,18 @@ const api = axios.create({
   baseURL: 'http://localhost:5000/api',
 });
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+);
 
 export const register = async (userData) => {
   const response = await api.post('/auth/register', userData);
@@ -35,7 +38,7 @@ export const getProfile = async () => {
 };
 
 export const addProduct = async (productData) => {
-  const response = await api.post('/products/add', productData);
+  const response = await api.post('/products', productData); // Updated to match backend route
   return response.data;
 };
 
@@ -49,13 +52,25 @@ export const trackProduct = async (productId) => {
   return response.data;
 };
 
+// Get all users (admin only)
 export const getAllUsers = async () => {
-  const response = await api.get('/users/all');
+  const response = await api.get('/users'); // Already updated
   return response.data;
 };
 
 export const deleteUser = async (userId) => {
   const response = await api.delete(`/users/${userId}`);
+  return response.data;
+};
+
+// New functions for verification
+export const getPendingVerifications = async () => {
+  const response = await api.get('/verifications/pending');
+  return response.data;
+};
+
+export const updateVerificationStatus = async (userId, status) => {
+  const response = await api.put(`/verifications/${userId}`, { status });
   return response.data;
 };
 

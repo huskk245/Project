@@ -26,7 +26,6 @@ const Navbar = () => {
       setUser(null);
     }
 
-    // Listen for storage changes (e.g., token added/removed in another tab)
     const handleStorageChange = () => {
       const newToken = localStorage.getItem('token');
       if (newToken) {
@@ -38,11 +37,10 @@ const Navbar = () => {
 
     window.addEventListener('storage', handleStorageChange);
 
-    // Also listen for navigation changes
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [navigate]); // Re-run on navigation changes
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {
@@ -56,6 +54,20 @@ const Navbar = () => {
     }
   };
 
+  const getDashboardPath = () => {
+    if (!user) return '/login';
+    switch (user.role) {
+      case 'farmer':
+        return '/farmer-dashboard';
+      case 'admin':
+        return '/admin-dashboard';
+      case 'consumer':
+        return '/consumer-dashboard';
+      default:
+        return '/login';
+    }
+  };
+
   return (
     <nav className="bg-green-800 p-4 fixed top-0 left-0 w-full z-10 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
@@ -65,12 +77,19 @@ const Navbar = () => {
         <div className="space-x-4">
           {user ? (
             <>
+              <Link to={getDashboardPath()}>
+                <Button
+                  className="bg-green-500 hover:bg-green-600 text-white text-lg font-semibold py-2 px-4 rounded-lg transition-all duration-300"
+                >
+                  Dashboard
+                </Button>
+              </Link>
               {user.role === 'farmer' && (
-                <Link to="/farmer-dashboard">
+                <Link to="/product-tagging">
                   <Button
                     className="bg-green-500 hover:bg-green-600 text-white text-lg font-semibold py-2 px-4 rounded-lg transition-all duration-300"
                   >
-                    Farmer Dashboard
+                    Tag Product
                   </Button>
                 </Link>
               )}
@@ -80,15 +99,6 @@ const Navbar = () => {
                     className="bg-green-500 hover:bg-green-600 text-white text-lg font-semibold py-2 px-4 rounded-lg transition-all duration-300"
                   >
                     Track Product
-                  </Button>
-                </Link>
-              )}
-              {user.role === 'admin' && (
-                <Link to="/admin-dashboard">
-                  <Button
-                    className="bg-green-500 hover:bg-green-600 text-white text-lg font-semibold py-2 px-4 rounded-lg transition-all duration-300"
-                  >
-                    Admin Dashboard
                   </Button>
                 </Link>
               )}

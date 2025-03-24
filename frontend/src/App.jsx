@@ -9,7 +9,9 @@ import FarmerDashboard from './pages/FarmerDashboard';
 import ProductTagging from './pages/ProductTagging';
 import TrackProduct from './pages/TrackProduct';
 import AdminDashboard from './pages/AdminDashboard';
-import farmBackground from './assets/farm.jpg'; // Ensure this image exists
+import ConsumerDashboard from './pages/ConsumerDashboard'; // Add this import
+import CompleteProfile from './pages/CompleteProfile'; // Add this import
+import farmBackground from './assets/farm.jpg';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -94,6 +96,14 @@ const App = () => {
               }
             />
             <Route
+              path="/complete-profile"
+              element={
+                <ProtectedRoute allowedRoles={['farmer']}>
+                  <CompleteProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/farmer-dashboard"
               element={
                 <ProtectedRoute allowedRoles={['farmer']}>
@@ -122,6 +132,14 @@ const App = () => {
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
                   <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/consumer-dashboard"
+              element={
+                <ProtectedRoute allowedRoles={['consumer']}>
+                  <ConsumerDashboard />
                 </ProtectedRoute>
               }
             />
