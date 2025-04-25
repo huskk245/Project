@@ -1,0 +1,24 @@
+{
+  "name": "supply-chain-blockchain",
+  "version": "1.0.0",
+  "description": "Blockchain implementation for supply chain tracking with RFID, images, and freshness scores",
+  "main": "blockchain.js",
+  "scripts": {
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "deploy": "node deploy.js",
+    "deploy:dev": "NODE_ENV=development node deploy.js",
+    "deploy:prod": "NODE_ENV=production node deploy.js",
+    "test": "truffle test"
+  },
+  "dependencies": {
+    "@truffle/contract": "^4.6.19",
+    "@truffle/hdwallet-provider": "^2.1.12",
+    "dotenv": "^16.0.3",
+    "ipfs-http-client": "^60.0.0",
+    "web3": "^1.9.0"
+  },
+  "devDependencies": {
+    "truffle": "^5.9.0"
+  }
+} 
